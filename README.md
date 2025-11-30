@@ -33,17 +33,48 @@ cp .env.example .env
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` - Google OAuth2
 - `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` - Naver OAuth2
 
-### 2. 인프라 실행
+### 2. Docker 환경 설정 (권장)
 
-Docker를 사용하여 MariaDB와 Redis를 실행합니다.
+#### Docker Desktop 설치
 
-```bash
-docker run -d --name mariadb -p 3306:3306 \
-  -e MARIADB_ROOT_PASSWORD=root \
-  -e MARIADB_DATABASE=kraft \
-  mariadb:latest
+Windows:
+```powershell
+# winget 사용
+winget install Docker.DockerDesktop
 
-docker run -d --name redis -p 6379:6379 redis:latest
+# 또는 https://www.docker.com/products/docker-desktop 에서 다운로드
+```
+
+#### 인프라 실행
+
+```powershell
+# Windows PowerShell
+.\docker-start.ps1
+
+# 또는 직접 실행
+docker-compose up -d
+```
+
+컨테이너가 시작되면:
+- **MariaDB**: `localhost:3306`
+- **Redis**: `localhost:6379`
+
+#### 컨테이너 관리
+
+```powershell
+# 상태 확인
+docker-compose ps
+
+# 로그 확인
+docker-compose logs -f
+
+# 중지
+.\docker-stop.ps1
+# 또는
+docker-compose down
+
+# 데이터 초기화 (볼륨 삭제)
+docker-compose down -v
 ```
 
 ### 3. 애플리케이션 실행

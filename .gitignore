@@ -99,55 +99,11 @@ $RECYCLE.BIN/
 *~
 .fuse_hidden*
 .directory
-
-### Application Specific ###
-# Environment Variables
-.env
-.env.local
-.env.*.local
-
-# Secrets
-secret/
-*.json
-!gradle/wrapper/*.json
-
-# Logs
-logs/
-*.log
-*.log.*
-
-# Database
-*.db
-*.sql.bak
-
-# Application Properties with Secrets
-application-*.yml
-!application.yml
-!**/src/test/**/application*.yml
-
-# Build outputs
-*.jar
-*.war
-!gradle/wrapper/*.jar
-
-# Nginx
-nginx/*.inc
-
-# Scripts (배포 스크립트는 포함)
-# scripts/
-
-# Schema backup
-schema.sql.bak
 .Trash-*
 .nfs*
 
-### Logs ###
-logs/
-*.log
-*.log.*
-*.log.gz
-
-### Environment Variables ###
+### Application Specific ###
+# Environment Variables
 .env
 .env.local
 .env.*.local
@@ -155,7 +111,11 @@ logs/
 .env.test.local
 .env.production.local
 
-### Secret Files ###
+# Docker
+docker-compose.override.yml
+.docker/
+
+# Secrets
 secret/
 *secret*
 *.pem
@@ -163,63 +123,32 @@ secret/
 *.crt
 *.p12
 *.jks
-application-real-oauth.properties
-application-*-oauth.properties
 
-### Database ###
+# Logs
+logs/
+*.log
+*.log.*
+*.log.gz
+
+# Database
 *.db
+*.sql.bak
 *.sqlite
 *.sqlite3
 
-### Compiled Output ###
-target/
-bin/
-build/
-out/
-dist/
+# Application Properties with Secrets
+application-*.yml
+!application.yml
+!**/src/test/**/application*.yml
 
-### Test Coverage ###
-.coverage
-htmlcov/
-coverage/
-*.cover
-.pytest_cache/
-nosetests.xml
-coverage.xml
-*.coveragerc
+# Nginx
+nginx/*.inc
 
-### Package Files ###
-node_modules/
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
+# Schema backup
+schema.sql.bak
 
-### Backup Files ###
-*.bak
-*.gho
-*.ori
-*.orig
-*.tmp
-*~
-.#*
-
-### Cache ###
-.cache/
-*.cache
-.npm/
-.yarn/
-
-### Application Specific ###
-# Deployment scripts output
+# Deployment logs
 deploy.log
 health.log
 
-# Build artifacts
-*.jar
-*.war
-!gradle-wrapper.jar
-*.class
-
-# Resolved dependencies
-.resolved/
 

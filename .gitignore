@@ -1,0 +1,225 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+### Gradle ###
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+.gradletasknamecache
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea_modules/
+*.swp
+*.swo
+*~
+
+### Eclipse ###
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+.classpath
+.project
+.externalToolBuilders/
+*.launch
+.buildpath
+.target
+.tern-project
+.texlipse
+.springBeans
+.factorypath
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+.code-workspace
+
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Windows ###
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+### Linux ###
+*~
+.fuse_hidden*
+.directory
+
+### Application Specific ###
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Secrets
+secret/
+*.json
+!gradle/wrapper/*.json
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Database
+*.db
+*.sql.bak
+
+# Application Properties with Secrets
+application-*.yml
+!application.yml
+!**/src/test/**/application*.yml
+
+# Build outputs
+*.jar
+*.war
+!gradle/wrapper/*.jar
+
+# Nginx
+nginx/*.inc
+
+# Scripts (배포 스크립트는 포함)
+# scripts/
+
+# Schema backup
+schema.sql.bak
+.Trash-*
+.nfs*
+
+### Logs ###
+logs/
+*.log
+*.log.*
+*.log.gz
+
+### Environment Variables ###
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+### Secret Files ###
+secret/
+*secret*
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+application-real-oauth.properties
+application-*-oauth.properties
+
+### Database ###
+*.db
+*.sqlite
+*.sqlite3
+
+### Compiled Output ###
+target/
+bin/
+build/
+out/
+dist/
+
+### Test Coverage ###
+.coverage
+htmlcov/
+coverage/
+*.cover
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.coveragerc
+
+### Package Files ###
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+### Backup Files ###
+*.bak
+*.gho
+*.ori
+*.orig
+*.tmp
+*~
+.#*
+
+### Cache ###
+.cache/
+*.cache
+.npm/
+.yarn/
+
+### Application Specific ###
+# Deployment scripts output
+deploy.log
+health.log
+
+# Build artifacts
+*.jar
+*.war
+!gradle-wrapper.jar
+*.class
+
+# Resolved dependencies
+.resolved/
+

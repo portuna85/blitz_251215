@@ -4,6 +4,7 @@ import com.blitz.springboot.domain.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Posts extends BaseEntity {
 
@@ -26,6 +27,7 @@ public class Posts extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(nullable = false)
     private String author;
 
     @Builder

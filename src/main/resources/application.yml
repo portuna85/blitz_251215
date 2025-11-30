@@ -1,6 +1,24 @@
 spring:
   profiles:
     active: local
+    group:
+      local:
+        - oauth
+        - local-db
+        - minio
+      real:
+        - oauth
+        - real-db
+        - minio
+      real1:
+        - oauth
+        - real-db
+        - minio
+      real2:
+        - oauth
+        - real-db
+        - minio
+
   jpa:
     open-in-view: false
     show-sql: true
@@ -8,7 +26,6 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect
         format_sql: true
         default_batch_fetch_size: 100
   data:
@@ -44,10 +61,5 @@ logging:
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%15.15t] %-40.40logger{39} : %m%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%t] %-40.40logger{39} : %m%n"
-  file:
-    name: logs/blitz.log
-    path: logs
+  config: classpath:logback-spring.xml
 

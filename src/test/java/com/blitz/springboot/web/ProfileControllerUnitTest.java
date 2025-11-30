@@ -1,6 +1,7 @@
 package com.blitz.springboot.web;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.env.MockEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,10 +20,10 @@ public class ProfileControllerUnitTest {
         ProfileController controller = new ProfileController(env);
 
         //when
-        String profile = controller.profile();
+        ResponseEntity<String> response = controller.profile();
 
         //then
-        assertThat(profile).isEqualTo(expectedProfile);
+        assertThat(response.getBody()).isEqualTo(expectedProfile);
     }
 
     @Test
@@ -37,10 +38,10 @@ public class ProfileControllerUnitTest {
         ProfileController controller = new ProfileController(env);
 
         //when
-        String profile = controller.profile();
+        ResponseEntity<String> response = controller.profile();
 
         //then
-        assertThat(profile).isEqualTo(expectedProfile);
+        assertThat(response.getBody()).isEqualTo(expectedProfile);
     }
 
     @Test
@@ -51,9 +52,9 @@ public class ProfileControllerUnitTest {
         ProfileController controller = new ProfileController(env);
 
         //when
-        String profile = controller.profile();
+        ResponseEntity<String> response = controller.profile();
 
         //then
-        assertThat(profile).isEqualTo(expectedProfile);
+        assertThat(response.getBody()).isEqualTo(expectedProfile);
     }
 }

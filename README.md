@@ -213,35 +213,96 @@ blitz/
 
 이 프로젝트는 객체지향 설계의 SOLID 원칙을 철저히 준수합니다:
 
-1. **SRP (Single Responsibility Principle)** - 단일 책임 원칙
-   - Controller: HTTP 요청/응답 처리
-   - Service: 비즈니스 로직
-   - Repository: 데이터 접근
-   
-2. **OCP (Open-Closed Principle)** - 개방-폐쇄 원칙
-   - 인터페이스를 통한 확장 가능한 구조
-   
-3. **LSP (Liskov Substitution Principle)** - 리스코프 치환 원칙
-   - 인터페이스 구현체 교체 가능
-   
-4. **ISP (Interface Segregation Principle)** - 인터페이스 분리 원칙
-   - 작고 명확한 인터페이스
-   
-5. **DIP (Dependency Inversion Principle)** - 의존 역전 원칙
-   - 생성자 주입을 통한 느슨한 결합
+#### 1. **SRP (Single Responsibility Principle)** - 단일 책임 원칙
+- **Controller**: HTTP 요청/응답 처리만 담당
+- **Service**: 비즈니스 로직 처리만 담당
+- **Repository**: 데이터 접근만 담당
+- **BaseEntity**: Auditing 기능만 담당
+
+#### 2. **OCP (Open-Closed Principle)** - 개방-폐쇄 원칙
+- **OAuth2 Provider Strategy Pattern**: 새로운 OAuth 제공자 추가 시 기존 코드 수정 없이 확장 가능
+  ```java
+  // OAuth2Provider 인터페이스 구현만으로 확장
+  @Component
+  public class KakaoOAuth2Provider implements OAuth2Provider {
+      // 구현
+  }
+  ```
+- **Service 인터페이스**: 구현체 교체 가능
+
+#### 3. **LSP (Liskov Substitution Principle)** - 리스코프 치환 원칙
+- OAuth2Provider 구현체들은 동일한 인터페이스를 제공하여 교체 가능
+- Role enum의 각 권한은 동일한 인터페이스 제공
+
+#### 4. **ISP (Interface Segregation Principle)** - 인터페이스 분리 원칙
+- OAuth2Provider: Provider별로 필요한 메서드만 정의
+- Service 인터페이스: 클라이언트가 필요한 메서드만 노출
+
+#### 5. **DIP (Dependency Inversion Principle)** - 의존 역전 원칙
+- Controller → Service 인터페이스 의존
+- Service → Repository 인터페이스 의존
+- CustomOAuth2UserService → OAuth2ProviderFactory 인터페이스 의존
+- 생성자 주입(@RequiredArgsConstructor)을 통한 느슨한 결합
+
+### OAuth2 Provider 아키텍처
+
+```
+OAuth2 로그인 요청
+    ↓
+CustomOAuth2UserService
+    ↓
+OAuth2ProviderFactory
+    ↓
+┌─────────────────────────┐
+│ OAuth2Provider (인터페이스) │
+├─────────────────────────┤
+│ GoogleOAuth2Provider    │
+│ NaverOAuth2Provider     │
+│ (확장 가능)               │
+└─────────────────────────┘
+    ↓
+User 엔티티 생성/업데이트
+```
+
+### 도메인 엔티티 설계
+
+- **불변성 강화**: `@NoArgsConstructor(access = AccessLevel.PROTECTED)`
+- **검증 로직 내장**: 생성자/업데이트 메서드에서 유효성 검증
+- **책임 분리**: BaseEntity에서 공통 Auditing 필드 관리
 
 ### 레이어 구조
 
 ```
 ┌─────────────────────┐
-│   Presentation      │  Controller (Web Layer)
+│   Presentation      │  Controller (HTTP 요청/응답)
 ├─────────────────────┤
-│   Application       │  Service (Business Logic)
+│   Application       │  Service (비즈니스 로직)
 ├─────────────────────┤
-│   Domain            │  Entity, Repository
+│   Domain            │  Entity, Repository (도메인 로직)
 ├─────────────────────┤
-│   Infrastructure    │  JPA, Redis, External APIs
+│   Common            │  BaseEntity, Exception, Util
+├─────────────────────┤
+│   Infrastructure    │  JPA, Redis, OAuth2, External APIs
 └─────────────────────┘
+```
+
+### 패키지 구조 원칙
+
+```
+com.blitz.springboot/
+├── common/              # 공통 컴포넌트
+│   ├── BaseEntity      # 모든 엔티티의 기본 클래스
+│   └── exception/      # 예외 처리
+├── config/              # 설정 클래스
+│   └── auth/           # 인증/인가 설정
+│       └── dto/        # OAuth2 Provider 전략
+├── domain/              # 도메인 레이어
+│   ├── posts/          # 게시글 도메인
+│   └── user/           # 사용자 도메인
+├── service/             # 비즈니스 로직
+└── web/                 # 프레젠테이션 레이어
+    ├── dto/            # 데이터 전송 객체
+    └── *Controller     # 컨트롤러
 ```
 
 ## 📊 로깅

@@ -1,6 +1,6 @@
 package com.blitz.springboot.web;
 
-import com.blitz.springboot.web.dto.HelloResponseDto;
+import com.blitz.springboot.web.hello.dto.HelloResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,9 +1,9 @@
 package com.blitz.springboot.web;
 
-import com.blitz.springboot.config.auth.LoginUser;
-import com.blitz.springboot.config.auth.dto.SessionUser;
-import com.blitz.springboot.service.PostsService;
-import com.blitz.springboot.web.dto.PostsResponseDto;
+import com.blitz.springboot.config.security.resolver.LoginUser;
+import com.blitz.springboot.config.security.oauth.dto.SessionUser;
+import com.blitz.springboot.domain.posts.service.PostsService;
+import com.blitz.springboot.domain.posts.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -33,8 +33,8 @@ public class IndexController {
     public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postsService.findAllDesc());
         if (user != null) {
-            model.addAttribute("userName", user.getName());
-            log.debug("로그인 사용자: {}", user.getName());
+            model.addAttribute("userName", user.name());
+            log.debug("로그인 사용자: {}", user.name());
         }
         return "index";
     }

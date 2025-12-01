@@ -7,14 +7,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 전역 예외 처리 핸들러
- * SRP: 예외 처리 및 에러 응답 생성 책임
- */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -33,6 +30,16 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse response = ErrorResponse.of(errorCode, e.getMessage());
         return ResponseEntity.status(errorCode.getStatus()).body(response);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    protected ResponseEntity<Void> handleNoResourceFoundException(NoResourceFoundException e) {
+        if (e.getMessage().contains("favicon.ico")) {
+            log.debug("Favicon request ignored: {}", e.getResourcePath());
+        } else {
+            log.warn("Static resource not found: {}", e.getResourcePath());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

@@ -35,15 +35,20 @@ public class Posts extends BaseEntity {
     @Column(nullable = false)
     private String author;
 
+    @Column(nullable = false)
+    private String authorEmail;
+
     @Builder
-    public Posts(String title, String content, String author) {
+    public Posts(String title, String content, String author, String authorEmail) {
         validateTitle(title);
         validateContent(content);
         validateAuthor(author);
+        validateAuthorEmail(authorEmail);
 
         this.title = title;
         this.content = content;
         this.author = author;
+        this.authorEmail = authorEmail;
     }
 
     /**
@@ -59,6 +64,19 @@ public class Posts extends BaseEntity {
 
         this.title = title;
         this.content = content;
+    }
+
+    /**
+     * 해당 사용자가 게시글의 작성자인지 확인
+     *
+     * @param userEmail 확인할 사용자의 이메일
+     * @return 작성자인 경우 true, 아닌 경우 false
+     */
+    public boolean isAuthor(String userEmail) {
+        if (userEmail == null) {
+            return false;
+        }
+        return this.authorEmail.equals(userEmail);
     }
 
     private void validateTitle(String title) {
@@ -79,6 +97,12 @@ public class Posts extends BaseEntity {
     private void validateAuthor(String author) {
         if (author == null || author.isBlank()) {
             throw new IllegalArgumentException("작성자는 필수입니다");
+        }
+    }
+
+    private void validateAuthorEmail(String authorEmail) {
+        if (authorEmail == null || authorEmail.isBlank()) {
+            throw new IllegalArgumentException("작성자 이메일은 필수입니다");
         }
     }
 }

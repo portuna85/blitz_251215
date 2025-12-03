@@ -6,14 +6,16 @@ public record PostsResponseDto(
         Long id,
         String title,
         String content,
-        String author
+        String author,
+        String authorEmail
 ) {
     public PostsResponseDto(Posts entity) {
         this(
                 entity.getId(),
                 entity.getTitle(),
                 entity.getContent(),
-                entity.getAuthor()
+                entity.getAuthor(),
+                entity.getAuthorEmail()
         );
     }
 }

@@ -11,6 +11,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "C002", "서버 오류가 발생했습니다."),
 
     POST_NOT_FOUND(404, "P001", "게시글을 찾을 수 없습니다."),
+    UNAUTHORIZED_POST_ACCESS(403, "P002", "게시글에 대한 권한이 없습니다."),
 
     USER_NOT_FOUND(404, "U001", "사용자를 찾을 수 없습니다."),
 

@@ -29,7 +29,6 @@ class PostsApp {
     async save() {
         const data = {
             title: document.getElementById('title').value,
-            author: document.getElementById('author').value,
             content: document.getElementById('content').value
         };
 

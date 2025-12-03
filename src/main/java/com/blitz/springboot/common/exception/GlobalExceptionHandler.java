@@ -32,6 +32,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatus()).body(response);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    protected ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException e) {
+        log.error("UnauthorizedException: code={}, message={}", e.getErrorCode(), e.getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+        ErrorResponse response = ErrorResponse.of(errorCode, e.getMessage());
+        return ResponseEntity.status(errorCode.getStatus()).body(response);
+    }
+
     @ExceptionHandler(NoResourceFoundException.class)
     protected ResponseEntity<Void> handleNoResourceFoundException(NoResourceFoundException e) {
         if (e.getMessage().contains("favicon.ico")) {

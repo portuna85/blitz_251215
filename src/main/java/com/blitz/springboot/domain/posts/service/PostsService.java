@@ -11,9 +11,9 @@ public interface PostsService {
 
     Long save(PostsSaveRequestDto requestDto);
 
-    Long update(Long id, PostsUpdateRequestDto requestDto);
+    Long update(Long id, PostsUpdateRequestDto requestDto, String userEmail);
 
-    void delete(Long id);
+    void delete(Long id, String userEmail);
 
     PostsResponseDto findById(Long id);
 

@@ -8,6 +8,7 @@ public record PostsListResponseDto(
         Long id,
         String title,
         String author,
+        String authorEmail,
         LocalDateTime modifiedDate
 ) {
     public PostsListResponseDto(Posts entity) {
@@ -15,6 +16,7 @@ public record PostsListResponseDto(
                 entity.getId(),
                 entity.getTitle(),
                 entity.getAuthor(),
+                entity.getAuthorEmail(),
                 entity.getModifiedDate()
         );
     }

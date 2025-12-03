@@ -9,12 +9,17 @@ Spring Boot 3.x 기반의 모던 웹 서비스 프로젝트입니다.
 ## 🚀 주요 기능
 
 - ✅ 게시글 CRUD (Create, Read, Update, Delete)
+- ✅ 작성자 권한 검증 (본인만 수정/삭제 가능)
 - ✅ OAuth2 소셜 로그인 (Google, Naver)
 - ✅ Redis 기반 세션 관리
 - ✅ MariaDB 데이터 영속화
 - ✅ RESTful API 설계
 - ✅ Thymeleaf 템플릿 엔진
 - ✅ Docker 기반 인프라 구성
+- ✅ Spring Boot Actuator 헬스체크
+- ✅ Prometheus 메트릭 수집
+- ✅ CI/CD 파이프라인 (GitHub Actions)
+- ✅ 컨테이너 보안 스캔 (Trivy)
 
 ## 🛠 기술 스택
 
@@ -24,6 +29,7 @@ Spring Boot 3.x 기반의 모던 웹 서비스 프로젝트입니다.
 - **Spring Data JPA** - ORM
 - **Spring Security** - 인증/인가
 - **Spring Session** - 세션 관리
+- **Spring Boot Actuator** - 헬스체크 & 모니터링
 - **Hibernate** - JPA 구현체
 
 ### Frontend
@@ -38,6 +44,9 @@ Spring Boot 3.x 기반의 모던 웹 서비스 프로젝트입니다.
 
 ### DevOps
 - **Docker & Docker Compose** - 컨테이너화
+- **GitHub Actions** - CI/CD 파이프라인
+- **Trivy** - 컨테이너 보안 스캔
+- **Prometheus** - 메트릭 수집
 - **Gradle 9.2.1** - 빌드 도구
 - **Git** - 버전 관리
 
@@ -207,6 +216,17 @@ blitz/
 | GET | `/oauth2/authorization/naver` | Naver 로그인 |
 | GET | `/logout` | 로그아웃 |
 
+### Actuator 모니터링 API
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/actuator/health` | 헬스체크 (liveness) | No |
+| GET | `/actuator/health/readiness` | 준비 상태 확인 | No |
+| GET | `/actuator/health/liveness` | 생존 상태 확인 | No |
+| GET | `/actuator/info` | 애플리케이션 정보 | No |
+| GET | `/actuator/metrics` | 메트릭 목록 | Yes |
+| GET | `/actuator/prometheus` | Prometheus 메트릭 | Yes |
+
 ## 🏗 아키텍처
 
 ### SOLID 원칙 준수
@@ -342,6 +362,42 @@ docker-compose restart
 # 볼륨 포함 완전 삭제
 docker-compose down -v
 ```
+
+## 🚀 CI/CD 파이프라인
+
+### CI (Continuous Integration)
+
+**트리거**: `main`, `develop` 브랜치에 Push 또는 Pull Request
+
+**워크플로우**:
+1. ✅ 코드 체크아웃
+2. ✅ JDK 21 설정 (Gradle 캐싱 포함)
+3. ✅ Gradle 빌드 & 테스트
+4. ✅ 테스트 결과 업로드
+5. ✅ 빌드 아티팩트 저장
+6. ✅ PR에 테스트 결과 코멘트
+
+### CD (Continuous Deployment)
+
+**트리거**: `main` 브랜치에 Push
+
+**워크플로우**:
+1. ✅ Docker 이미지 빌드 (멀티스테이지, 레이어 캐싱)
+2. ✅ GHCR(GitHub Container Registry)에 푸시
+3. ✅ Trivy 보안 스캔 (취약점 검사)
+4. ✅ SSH를 통한 서버 배포
+5. ✅ 헬스체크 (실패 시 자동 롤백)
+6. ✅ 배포 상태 알림
+
+### Qodana 코드 품질 분석
+
+**트리거**: `main` 브랜치 Push, Pull Request, 수동 실행
+
+**기능**:
+- 코드 품질 분석
+- 보안 취약점 검사
+- 코드 스멜 감지
+- PR 코멘트 자동 생성
 
 ## 🤝 기여
 

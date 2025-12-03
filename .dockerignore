@@ -1,0 +1,49 @@
+# Git
+.git
+.gitignore
+.github
+
+# Build
+build/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Docs
+README.md
+*.md
+
+# Secrets
+secret/
+.env
+*.pem
+*.key
+
+# Test
+src/test/
+
+# Misc
+tmp/
+*.swp
+*.swo
+*~
+

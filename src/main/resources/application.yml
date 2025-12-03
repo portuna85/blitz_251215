@@ -54,6 +54,27 @@ server:
       enabled: true
       force: true
 
+# Actuator 설정 - 헬스체크 및 모니터링
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name:blitz}
+
 logging:
   config: classpath:logback-spring.xml
 

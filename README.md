@@ -14,6 +14,7 @@
 - [아키텍처](#-아키텍처)
 - [시작하기](#-시작하기)
 - [환경 설정](#-환경-설정)
+- [서버 배포](#-서버-배포)
 - [API 문서](#-api-문서)
 - [CI/CD](#-cicd-파이프라인)
 - [모니터링](#-모니터링)
@@ -359,6 +360,122 @@ logs/
 
 ---
 
+## 🚀 서버 배포
+
+### 환경변수 관리
+
+프로젝트는 환경변수를 통해 민감정보를 안전하게 관리합니다. 다음 파일들이 제공됩니다:
+
+| 파일 | 용도 | Git 추적 |
+|-----|------|---------|
+| `.env.example` | 환경변수 템플릿 | ✅ |
+| `.env` | 실제 환경변수 | ❌ (gitignore) |
+| `.env.docker.example` | Docker Compose용 템플릿 | ✅ |
+| `scripts/set-env.sh` | Shell 환경변수 스크립트 | ❌ |
+| `scripts/blitz.service` | systemd 서비스 파일 | ✅ |
+
+### 배포 방법 1: JAR 직접 실행
+
+```bash
+# 1. 서버에 접속
+ssh steve@192.168.0.9
+
+# 2. 프로젝트 클론
+git clone https://github.com/portuna85/blitz.git
+cd blitz
+
+# 3. 환경변수 설정
+cp .env.example .env
+nano .env  # 실제 값으로 수정
+
+# 4. 빌드
+./gradlew clean build -x test
+
+# 5. 환경변수 로드 및 실행
+export $(cat .env | xargs)
+java -jar build/libs/blitz-*.jar
+
+# 또는 백그라운드 실행
+nohup java -jar build/libs/blitz-*.jar > logs/app.log 2>&1 &
+```
+
+### 배포 방법 2: systemd 서비스
+
+```bash
+# 1. JAR 파일 빌드 및 배치
+./gradlew clean build -x test
+sudo mkdir -p /opt/blitz
+sudo cp build/libs/blitz-*.jar /opt/blitz/blitz.jar
+
+# 2. .env 파일 복사
+sudo cp .env /opt/blitz/.env
+sudo chown steve:steve /opt/blitz/.env
+sudo chmod 600 /opt/blitz/.env
+
+# 3. 서비스 파일 설정
+sudo cp scripts/blitz.service /etc/systemd/system/
+sudo nano /etc/systemd/system/blitz.service
+
+# 4. 서비스 시작
+sudo systemctl daemon-reload
+sudo systemctl enable blitz
+sudo systemctl start blitz
+
+# 5. 상태 확인
+sudo systemctl status blitz
+sudo journalctl -u blitz -f
+```
+
+### 배포 방법 3: 자동 배포 스크립트
+
+```bash
+# 로컬에서 서버로 자동 배포
+chmod +x scripts/deploy-to-server.sh
+./scripts/deploy-to-server.sh
+```
+
+**스크립트가 자동으로 수행하는 작업:**
+1. ✅ 로컬에서 JAR 빌드
+2. ✅ 서버로 파일 전송
+3. ✅ 기존 프로세스 종료
+4. ✅ 새 버전 실행
+5. ✅ 헬스체크 수행
+
+### 환경변수 확인
+
+```bash
+# 환경변수가 올바르게 설정되었는지 확인
+chmod +x scripts/check-env.sh
+./scripts/check-env.sh
+```
+
+### 보안 체크리스트
+
+배포 전 반드시 확인하세요:
+
+```bash
+# 1. .env 파일 권한 설정
+chmod 600 .env
+
+# 2. Git에 민감정보가 포함되지 않았는지 확인
+git status
+git diff
+
+# 3. 강력한 비밀번호 생성
+openssl rand -base64 32
+
+# 4. 방화벽 설정 (필요한 포트만 열기)
+sudo ufw allow 8080/tcp
+sudo ufw allow 22/tcp
+sudo ufw enable
+```
+
+### 상세 가이드
+
+전체 배포 프로세스, 문제 해결, 보안 설정에 대한 자세한 내용은 [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)를 참조하세요.
+
+---
+
 ## 📡 API 문서
 
 ### Posts API
@@ -628,7 +745,4 @@ docker-compose down -v
 
 **Made with ❤️ by Portuna**
 
-</div> 
-
-
-
+</div>

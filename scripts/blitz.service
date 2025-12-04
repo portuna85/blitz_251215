@@ -1,0 +1,39 @@
+[Unit]
+Description=Blitz Spring Boot Application
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=steve
+WorkingDirectory=/home/steve/blitz
+ExecStart=/usr/bin/java -jar /home/steve/blitz/blitz.jar
+
+# 환경변수 파일 로드
+EnvironmentFile=/home/steve/blitz/.env
+
+# 또는 직접 환경변수 지정
+# Environment="SPRING_PROFILES_ACTIVE=real"
+# Environment="SERVER_PORT=8080"
+# Environment="DB_HOST=localhost"
+# Environment="DB_PORT=3306"
+# Environment="DB_NAME=blitz_db"
+# Environment="DB_USER=blitz_user"
+# Environment="DB_PASSWORD=your_password"
+# Environment="REDIS_HOST=localhost"
+# Environment="REDIS_PORT=6379"
+# Environment="REDIS_PASSWORD=your_redis_password"
+
+# JVM 옵션
+Environment="JAVA_OPTS=-Xms512m -Xmx1024m -XX:+UseG1GC"
+
+SuccessExitStatus=143
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=blitz
+
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+

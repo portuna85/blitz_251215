@@ -1,9 +1,6 @@
 package com.blitz.springboot.domain.posts.service;
 
-import com.blitz.springboot.domain.posts.dto.PostsListResponseDto;
-import com.blitz.springboot.domain.posts.dto.PostsResponseDto;
-import com.blitz.springboot.domain.posts.dto.PostsSaveRequestDto;
-import com.blitz.springboot.domain.posts.dto.PostsUpdateRequestDto;
+import com.blitz.springboot.domain.posts.dto.*;
 
 import java.util.List;
 
@@ -17,6 +14,16 @@ public interface PostsService {
 
     PostsResponseDto findById(Long id);
 
+    PostsResponseDto findByIdWithViewCount(Long id);
+
     List<PostsListResponseDto> findAllDesc();
+
+    PostsPageResponseDto findAllWithPaging(int page, int size);
+
+    PostsPageResponseDto searchPosts(String keyword, int page, int size);
+
+    List<PostsListResponseDto> findMyPosts(String userEmail);
+
+    List<PostsListResponseDto> findPopularPosts(int limit);
 }
 

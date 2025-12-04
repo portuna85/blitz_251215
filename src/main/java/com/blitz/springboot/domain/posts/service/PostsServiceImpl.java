@@ -5,12 +5,13 @@ import com.blitz.springboot.common.exception.ErrorCode;
 import com.blitz.springboot.common.exception.UnauthorizedException;
 import com.blitz.springboot.domain.posts.Posts;
 import com.blitz.springboot.domain.posts.PostsRepository;
-import com.blitz.springboot.domain.posts.dto.PostsListResponseDto;
-import com.blitz.springboot.domain.posts.dto.PostsResponseDto;
-import com.blitz.springboot.domain.posts.dto.PostsSaveRequestDto;
-import com.blitz.springboot.domain.posts.dto.PostsUpdateRequestDto;
+import com.blitz.springboot.domain.posts.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,12 +59,97 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
+    @Transactional
+    public PostsResponseDto findByIdWithViewCount(Long id) {
+        Posts entity = findPostsById(id);
+        entity.incrementViewCount();
+        log.debug("게시글 조회수 증가: id={}, viewCount={}", id, entity.getViewCount());
+        return new PostsResponseDto(entity);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<PostsListResponseDto> findAllDesc() {
         List<PostsListResponseDto> result = postsRepository.findAllDesc().stream()
                 .map(PostsListResponseDto::new)
                 .toList();
         log.debug("게시글 목록 조회 완료: count={}", result.size());
+        return result;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostsPageResponseDto findAllWithPaging(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Posts> postsPage = postsRepository.findAll(pageable);
+
+        List<PostsListResponseDto> posts = postsPage.getContent().stream()
+                .map(PostsListResponseDto::new)
+                .toList();
+
+        log.debug("게시글 페이징 조회 완료: page={}, size={}, totalElements={}",
+                page, size, postsPage.getTotalElements());
+
+        return PostsPageResponseDto.builder()
+                .posts(posts)
+                .currentPage(postsPage.getNumber())
+                .totalPages(postsPage.getTotalPages())
+                .totalElements(postsPage.getTotalElements())
+                .size(postsPage.getSize())
+                .hasNext(postsPage.hasNext())
+                .hasPrevious(postsPage.hasPrevious())
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostsPageResponseDto searchPosts(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Posts> postsPage = postsRepository.searchByKeyword(keyword, pageable);
+
+        List<PostsListResponseDto> posts = postsPage.getContent().stream()
+                .map(PostsListResponseDto::new)
+                .toList();
+
+        log.debug("게시글 검색 완료: keyword={}, page={}, size={}, totalElements={}",
+                keyword, page, size, postsPage.getTotalElements());
+
+        return PostsPageResponseDto.builder()
+                .posts(posts)
+                .currentPage(postsPage.getNumber())
+                .totalPages(postsPage.getTotalPages())
+                .totalElements(postsPage.getTotalElements())
+                .size(postsPage.getSize())
+                .hasNext(postsPage.hasNext())
+                .hasPrevious(postsPage.hasPrevious())
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findMyPosts(String userEmail) {
+        if (userEmail == null || userEmail.isBlank()) {
+            log.warn("내 글 조회 실패: 이메일 없음");
+            throw new IllegalArgumentException("이메일은 필수입니다");
+        }
+
+        List<PostsListResponseDto> result = postsRepository.findByAuthorEmail(userEmail).stream()
+                .map(PostsListResponseDto::new)
+                .toList();
+
+        log.debug("내 글 조회 완료: userEmail={}, count={}", userEmail, result.size());
+        return result;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findPopularPosts(int limit) {
+        Pageable pageable = PageRequest.of(0, limit);
+        List<PostsListResponseDto> result = postsRepository.findTopByViewCount(pageable).stream()
+                .map(PostsListResponseDto::new)
+                .toList();
+
+        log.debug("인기 게시글 조회 완료: limit={}, count={}", limit, result.size());
         return result;
     }
 

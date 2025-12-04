@@ -50,7 +50,28 @@ public class IndexController {
     }
 
     /**
-     * 게시글 수정 페이지
+     * 게시글 상세보기 페이지 (조회수 증가)
+     *
+     * @param id 게시글 ID
+     * @param model 뷰 모델
+     * @param user 로그인 사용자 정보
+     * @return 게시글 상세 페이지 템플릿명
+     */
+    @GetMapping("/posts/view/{id}")
+    public String postsView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
+        PostsResponseDto dto = postsService.findByIdWithViewCount(id);
+        model.addAttribute("post", dto);
+
+        if (user != null) {
+            model.addAttribute("userName", user.name());
+            model.addAttribute("userEmail", user.email());
+        }
+
+        return "posts-view";
+    }
+
+    /**
+     * 게시글 수정 페이지 (조회수 증가 안 함)
      *
      * @param id 게시글 ID
      * @param model 뷰 모델

@@ -1,29 +1,28 @@
-package com.blitz.springboot.domain.posts.dto;
+package com.blitz.springboot.domain.comment.dto;
 
-import com.blitz.springboot.domain.posts.Posts;
+import com.blitz.springboot.domain.comment.Comment;
 
 import java.time.LocalDateTime;
 
-public record PostsResponseDto(
+public record CommentResponseDto(
         Long id,
-        String title,
         String content,
         String author,
         String authorEmail,
-        Long viewCount,
+        Long postId,
         LocalDateTime createdDate,
         LocalDateTime modifiedDate
 ) {
-    public PostsResponseDto(Posts entity) {
+    public CommentResponseDto(Comment entity) {
         this(
                 entity.getId(),
-                entity.getTitle(),
                 entity.getContent(),
                 entity.getAuthor(),
                 entity.getAuthorEmail(),
-                entity.getViewCount(),
+                entity.getPost().getId(),
                 entity.getCreatedDate(),
                 entity.getModifiedDate()
         );
     }
 }
+

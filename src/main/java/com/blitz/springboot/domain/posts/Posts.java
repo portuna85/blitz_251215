@@ -1,16 +1,15 @@
 package com.blitz.springboot.domain.posts;
 
 import com.blitz.springboot.common.BaseEntity;
+import com.blitz.springboot.domain.comment.Comment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AccessLevel;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 게시글 엔티티
@@ -38,6 +37,12 @@ public class Posts extends BaseEntity {
     @Column(nullable = false)
     private String authorEmail;
 
+    @Column(nullable = false)
+    private Long viewCount;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
     public Posts(String title, String content, String author, String authorEmail) {
         validateTitle(title);
@@ -49,6 +54,7 @@ public class Posts extends BaseEntity {
         this.content = content;
         this.author = author;
         this.authorEmail = authorEmail;
+        this.viewCount = 0L;
     }
 
     /**
@@ -77,6 +83,13 @@ public class Posts extends BaseEntity {
             return false;
         }
         return this.authorEmail.equals(userEmail);
+    }
+
+    /**
+     * 조회수 증가
+     */
+    public void incrementViewCount() {
+        this.viewCount++;
     }
 
     private void validateTitle(String title) {

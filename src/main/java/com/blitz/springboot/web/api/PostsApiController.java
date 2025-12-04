@@ -72,7 +72,7 @@ public class PostsApiController {
     @GetMapping("/{id}")
     public ResponseEntity<PostsResponseDto> findById(@PathVariable Long id) {
         log.debug("게시글 조회 요청: id={}", id);
-        PostsResponseDto response = postsService.findById(id);
+        PostsResponseDto response = postsService.findByIdWithViewCount(id);
         return ResponseEntity.ok(response);
     }
 
@@ -81,6 +81,49 @@ public class PostsApiController {
         log.debug("게시글 목록 조회 요청");
         List<PostsListResponseDto> response = postsService.findAllDesc();
         log.debug("게시글 목록 조회 완료: count={}", response.size());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/paging")
+    public ResponseEntity<com.blitz.springboot.domain.posts.dto.PostsPageResponseDto> findAllWithPaging(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        log.debug("게시글 페이징 조회 요청: page={}, size={}", page, size);
+        com.blitz.springboot.domain.posts.dto.PostsPageResponseDto response =
+                postsService.findAllWithPaging(page, size);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<com.blitz.springboot.domain.posts.dto.PostsPageResponseDto> searchPosts(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        log.debug("게시글 검색 요청: keyword={}, page={}, size={}", keyword, page, size);
+        com.blitz.springboot.domain.posts.dto.PostsPageResponseDto response =
+                postsService.searchPosts(keyword, page, size);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<PostsListResponseDto>> findMyPosts(@LoginUser SessionUser user) {
+        if (user == null) {
+            log.warn("비로그인 사용자의 내 글 조회 시도");
+            throw new com.blitz.springboot.common.exception.UnauthorizedException(
+                    com.blitz.springboot.common.exception.ErrorCode.UNAUTHORIZED_POST_ACCESS,
+                    "로그인이 필요합니다."
+            );
+        }
+        log.debug("내 글 조회 요청: userEmail={}", user.email());
+        List<PostsListResponseDto> response = postsService.findMyPosts(user.email());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<List<PostsListResponseDto>> findPopularPosts(
+            @RequestParam(defaultValue = "10") int limit) {
+        log.debug("인기 게시글 조회 요청: limit={}", limit);
+        List<PostsListResponseDto> response = postsService.findPopularPosts(limit);
         return ResponseEntity.ok(response);
     }
 }

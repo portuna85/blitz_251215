@@ -29,6 +29,18 @@ public class PostsSaveRequestDto {
         this.authorEmail = authorEmail;
     }
 
+    public PostsSaveRequestDto withAuthor(String author, String authorEmail) {
+        if (author == null || authorEmail == null) {
+            throw new IllegalArgumentException("작성자 정보는 필수입니다");
+        }
+        return PostsSaveRequestDto.builder()
+                .title(this.title)
+                .content(this.content)
+                .author(author)
+                .authorEmail(authorEmail)
+                .build();
+    }
+
     public Posts toEntity() {
         return Posts.builder()
                 .title(title)
@@ -38,4 +50,3 @@ public class PostsSaveRequestDto {
                 .build();
     }
 }
-

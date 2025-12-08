@@ -1,5 +1,7 @@
 package com.blitz.springboot.domain.comment.dto;
 
+import com.blitz.springboot.domain.comment.Comment;
+import com.blitz.springboot.domain.posts.Posts;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,5 +23,27 @@ public class CommentSaveRequestDto {
         this.author = author;
         this.authorEmail = authorEmail;
     }
-}
 
+    public CommentSaveRequestDto withAuthor(String author, String authorEmail) {
+        if (author == null || authorEmail == null) {
+            throw new IllegalArgumentException("작성자 정보는 필수입니다");
+        }
+        return CommentSaveRequestDto.builder()
+                .content(this.content)
+                .author(author)
+                .authorEmail(authorEmail)
+                .build();
+    }
+
+    public Comment toEntity(Posts post) {
+        if (post == null) {
+            throw new IllegalArgumentException("게시글 정보는 필수입니다");
+        }
+        return Comment.builder()
+                .content(content)
+                .author(author)
+                .authorEmail(authorEmail)
+                .post(post)
+                .build();
+    }
+}

@@ -30,12 +30,7 @@ public class CommentServiceImpl implements CommentService {
     public Long save(Long postId, CommentSaveRequestDto requestDto) {
         Posts post = findPostById(postId);
 
-        Comment comment = Comment.builder()
-                .content(requestDto.getContent())
-                .author(requestDto.getAuthor())
-                .authorEmail(requestDto.getAuthorEmail())
-                .post(post)
-                .build();
+        Comment comment = requestDto.toEntity(post);
 
         Comment savedComment = commentRepository.save(comment);
         log.info("댓글 저장 완료: id={}, postId={}, author={}",
@@ -121,7 +116,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> {
                     log.warn("댓글을 찾을 수 없음: id={}", commentId);
                     return new EntityNotFoundException(
-                            ErrorCode.POST_NOT_FOUND,
+                            ErrorCode.COMMENT_NOT_FOUND,
                             "댓글을 찾을 수 없습니다. id=" + commentId
                     );
                 });
@@ -131,7 +126,7 @@ public class CommentServiceImpl implements CommentService {
         if (userEmail == null) {
             log.warn("로그인하지 않은 사용자의 댓글 수정/삭제 시도: commentId={}", comment.getId());
             throw new UnauthorizedException(
-                    ErrorCode.UNAUTHORIZED_POST_ACCESS,
+                    ErrorCode.UNAUTHORIZED_COMMENT_ACCESS,
                     "로그인이 필요합니다."
             );
         }
@@ -146,4 +141,3 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 }
-

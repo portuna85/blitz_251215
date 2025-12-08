@@ -37,7 +37,7 @@ public class PostsServiceImpl implements PostsService {
     public Long update(Long id, PostsUpdateRequestDto requestDto, String userEmail) {
         Posts posts = findPostsById(id);
         validateAuthor(posts, userEmail);
-        posts.update(requestDto.getTitle(), requestDto.getContent());
+        requestDto.applyUpdate(posts);
         log.info("게시글 수정 완료: id={}, title={}, userEmail={}", id, requestDto.getTitle(), userEmail);
         return id;
     }
@@ -190,4 +190,3 @@ public class PostsServiceImpl implements PostsService {
         }
     }
 }
-

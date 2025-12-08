@@ -1,5 +1,7 @@
 package com.blitz.springboot.web.api;
 
+import com.blitz.springboot.common.exception.ErrorCode;
+import com.blitz.springboot.common.exception.UnauthorizedException;
 import com.blitz.springboot.config.security.oauth.dto.SessionUser;
 import com.blitz.springboot.config.security.resolver.LoginUser;
 import com.blitz.springboot.domain.comment.dto.CommentResponseDto;
@@ -29,17 +31,13 @@ public class CommentApiController {
                                       @LoginUser SessionUser user) {
         if (user == null) {
             log.warn("비로그인 사용자의 댓글 작성 시도");
-            throw new com.blitz.springboot.common.exception.UnauthorizedException(
-                    com.blitz.springboot.common.exception.ErrorCode.UNAUTHORIZED_POST_ACCESS,
+            throw new UnauthorizedException(
+                    ErrorCode.UNAUTHORIZED_COMMENT_ACCESS,
                     "로그인이 필요합니다."
             );
         }
 
-        CommentSaveRequestDto enrichedDto = CommentSaveRequestDto.builder()
-                .content(requestDto.getContent())
-                .author(user.name())
-                .authorEmail(user.email())
-                .build();
+        CommentSaveRequestDto enrichedDto = requestDto.withAuthor(user.name(), user.email());
 
         log.info("댓글 생성 요청: postId={}, author={}", postId, user.name());
         Long savedId = commentService.save(postId, enrichedDto);
@@ -90,4 +88,3 @@ public class CommentApiController {
         return ResponseEntity.ok(count);
     }
 }
-

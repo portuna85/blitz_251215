@@ -13,6 +13,9 @@ public enum ErrorCode {
     POST_NOT_FOUND(404, "P001", "게시글을 찾을 수 없습니다."),
     UNAUTHORIZED_POST_ACCESS(403, "P002", "게시글에 대한 권한이 없습니다."),
 
+    COMMENT_NOT_FOUND(404, "CMT001", "댓글을 찾을 수 없습니다."),
+    UNAUTHORIZED_COMMENT_ACCESS(403, "CMT002", "댓글에 대한 권한이 없습니다."),
+
     USER_NOT_FOUND(404, "U001", "사용자를 찾을 수 없습니다."),
 
     OAUTH_PROVIDER_NOT_SUPPORTED(400, "O001", "지원하지 않는 OAuth 제공자입니다.");

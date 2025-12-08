@@ -30,7 +30,7 @@ public class CommentApiController {
         if (user == null) {
             log.warn("비로그인 사용자의 댓글 작성 시도");
             throw new com.blitz.springboot.common.exception.UnauthorizedException(
-                    com.blitz.springboot.common.exception.ErrorCode.UNAUTHORIZED_POST_ACCESS,
+                    com.blitz.springboot.common.exception.ErrorCode.UNAUTHORIZED_COMMENT_ACCESS,
                     "로그인이 필요합니다."
             );
         }

@@ -30,12 +30,7 @@ public class CommentServiceImpl implements CommentService {
     public Long save(Long postId, CommentSaveRequestDto requestDto) {
         Posts post = findPostById(postId);
 
-        Comment comment = Comment.builder()
-                .content(requestDto.getContent())
-                .author(requestDto.getAuthor())
-                .authorEmail(requestDto.getAuthorEmail())
-                .post(post)
-                .build();
+        Comment comment = requestDto.toEntity(post);
 
         Comment savedComment = commentRepository.save(comment);
         log.info("댓글 저장 완료: id={}, postId={}, author={}",

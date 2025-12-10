@@ -1,5 +1,7 @@
 package com.blitz.springboot.domain.comment.dto;
 
+import com.blitz.springboot.domain.comment.Comment;
+import com.blitz.springboot.domain.posts.Posts;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +22,15 @@ public class CommentSaveRequestDto {
         this.content = content;
         this.author = author;
         this.authorEmail = authorEmail;
+    }
+
+    public Comment toEntity(Posts post) {
+        return Comment.builder()
+                .content(content)
+                .author(author)
+                .authorEmail(authorEmail)
+                .post(post)
+                .build();
     }
 }
 

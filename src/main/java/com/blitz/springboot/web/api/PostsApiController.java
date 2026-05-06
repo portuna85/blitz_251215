@@ -35,12 +35,7 @@ public class PostsApiController {
             );
         }
 
-        PostsSaveRequestDto enrichedDto = PostsSaveRequestDto.builder()
-                .title(requestDto.getTitle())
-                .content(requestDto.getContent())
-                .author(user.name())
-                .authorEmail(user.email())
-                .build();
+        PostsSaveRequestDto enrichedDto = requestDto.withAuthor(user.name(), user.email());
 
         log.info("게시글 생성 요청: title={}, author={}, email={}",
                 enrichedDto.getTitle(), enrichedDto.getAuthor(), enrichedDto.getAuthorEmail());

@@ -1,5 +1,7 @@
 package com.blitz.springboot.web.api;
 
+import com.blitz.springboot.common.exception.ErrorCode;
+import com.blitz.springboot.common.exception.UnauthorizedException;
 import com.blitz.springboot.config.security.oauth.dto.SessionUser;
 import com.blitz.springboot.config.security.resolver.LoginUser;
 import com.blitz.springboot.domain.comment.dto.CommentResponseDto;
@@ -35,11 +37,7 @@ public class CommentApiController {
             );
         }
 
-        CommentSaveRequestDto enrichedDto = CommentSaveRequestDto.builder()
-                .content(requestDto.getContent())
-                .author(user.name())
-                .authorEmail(user.email())
-                .build();
+        CommentSaveRequestDto enrichedDto = requestDto.withAuthor(user.name(), user.email());
 
         log.info("댓글 생성 요청: postId={}, author={}", postId, user.name());
         Long savedId = commentService.save(postId, enrichedDto);
@@ -90,4 +88,3 @@ public class CommentApiController {
         return ResponseEntity.ok(count);
     }
 }
-

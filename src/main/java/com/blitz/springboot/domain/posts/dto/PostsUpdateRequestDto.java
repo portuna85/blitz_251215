@@ -1,5 +1,6 @@
 package com.blitz.springboot.domain.posts.dto;
 
+import com.blitz.springboot.domain.posts.Posts;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -22,5 +23,11 @@ public class PostsUpdateRequestDto {
         this.title = title;
         this.content = content;
     }
-}
 
+    public void applyUpdate(Posts posts) {
+        if (posts == null) {
+            throw new IllegalArgumentException("게시글 정보는 필수입니다");
+        }
+        posts.update(title, content);
+    }
+}

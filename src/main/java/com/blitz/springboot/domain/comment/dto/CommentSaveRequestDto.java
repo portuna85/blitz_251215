@@ -34,3 +34,26 @@ public class CommentSaveRequestDto {
     }
 }
 
+    public CommentSaveRequestDto withAuthor(String author, String authorEmail) {
+        if (author == null || authorEmail == null) {
+            throw new IllegalArgumentException("작성자 정보는 필수입니다");
+        }
+        return CommentSaveRequestDto.builder()
+                .content(this.content)
+                .author(author)
+                .authorEmail(authorEmail)
+                .build();
+    }
+
+    public Comment toEntity(Posts post) {
+        if (post == null) {
+            throw new IllegalArgumentException("게시글 정보는 필수입니다");
+        }
+        return Comment.builder()
+                .content(content)
+                .author(author)
+                .authorEmail(authorEmail)
+                .post(post)
+                .build();
+    }
+}

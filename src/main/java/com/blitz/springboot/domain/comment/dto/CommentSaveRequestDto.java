@@ -24,6 +24,16 @@ public class CommentSaveRequestDto {
         this.authorEmail = authorEmail;
     }
 
+    public Comment toEntity(Posts post) {
+        return Comment.builder()
+                .content(content)
+                .author(author)
+                .authorEmail(authorEmail)
+                .post(post)
+                .build();
+    }
+}
+
     public CommentSaveRequestDto withAuthor(String author, String authorEmail) {
         if (author == null || authorEmail == null) {
             throw new IllegalArgumentException("작성자 정보는 필수입니다");

@@ -135,7 +135,7 @@ public class CommentServiceImpl implements CommentService {
             log.warn("권한 없는 사용자의 댓글 수정/삭제 시도: commentId={}, userEmail={}, author={}",
                     comment.getId(), userEmail, comment.getAuthor());
             throw new UnauthorizedException(
-                    ErrorCode.UNAUTHORIZED_POST_ACCESS,
+                    ErrorCode.UNAUTHORIZED_COMMENT_ACCESS,
                     "댓글을 수정/삭제할 권한이 없습니다."
             );
         }
